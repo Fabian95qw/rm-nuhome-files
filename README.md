@@ -6,6 +6,11 @@ To Upload a file, simply drag and drop it into the gray square, and wait until t
 
 ![upload](/img/upload.gif "upload")
 
+# Deleting files
+Deleting files is simple. Just click the "X"
+
+![delete](/img/delete.gif "delete")
+
 # Accessing files via URL
 At the bottom of the page you'll find a list of all uploaded files. 
 They all containt their absolute link to the file, so you can simply copy the url.
