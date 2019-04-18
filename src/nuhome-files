@@ -1,0 +1,45 @@
+#!/bin/sh
+
+AUTOSTART_DIR=/etc/config/rc.d
+ADDON_DIR=/etc/config/addons/nuhome-files
+WWW_DIR=/etc/config/addons/www/nuhome-files
+
+AUTOSTART_SCRIPT=nuhome-files.sh
+START_SCRIPT=nuhome-files.sh
+STOP_SCRIPT=stop.tcl
+CONFIG_URL=/addons/nuhome-files/index.cgi
+
+cd $ADDON_DIR
+
+case "$1" in
+""|start)
+	tclsh $START_SCRIPT &
+	;;
+info)
+	echo "Version: 1.0"
+	echo "Name: Nuhome Files"
+	echo "Info: <img src='/addons/nuhome-files/logo.png' />"
+	echo "Operations: uninstall"
+	echo "Config-Url: $CONFIG_URL"
+	;;
+restart)
+	tclsh $STOP_SCRIPT
+	tclsh $START_SCRIPT &
+	;;
+stop)
+	tclsh $STOP_SCRIPT
+	;;
+uninstall)
+	tclsh $STOP_SCRIPT
+	cd $AUTOSTART_DIR
+		
+	rm -rf $ADDON_DIR
+	rm -rf $WWW_DIR
+	rm -rf $AUTOSTART_SCRIPT
+	updateAddonConfig.tcl -d nuhome-files
+	;;
+*)
+	echo "usage:"
+	echo "nuhome-files.sh [info|start|stop|restart|uninstall]"
+	;;
+esac

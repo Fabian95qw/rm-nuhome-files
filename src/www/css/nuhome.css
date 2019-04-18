@@ -1,0 +1,23 @@
+#hiddenFile {
+    display: none;
+}
+
+.progress {
+    margin-top: 5px;
+}
+
+#drop-zone {
+    margin-top: 2rem;
+}
+
+#drop-zone-body {
+    background-color: grey;
+    color: white;
+    height: 20rem;
+    overflow-y: scroll;
+}
+
+.upload-item {
+    margin-top: 1rem;
+    padding: 1rem;
+}

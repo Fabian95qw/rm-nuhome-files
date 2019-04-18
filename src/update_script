@@ -1,0 +1,58 @@
+#!/bin/sh
+
+ADDONENAME=nuhome-files
+
+RCDDIR=/usr/local/etc/config/rc.d
+ADDONDIR=/usr/local/etc/config/addons/$ADDONENAME
+WWWDIR=/usr/local/etc/config/addons/www/$ADDONENAME
+CONFIGDIR=/usr/local/etc/config
+
+
+mkdir -p /mnt
+if [ "$1" == "CCU2" ]; then
+	echo "CCU2"
+	mount -t ubifs ubi0:root /mnt
+	mount -t ubifs ubi1:user /usr/local
+else
+	echo "CCU1"
+	mount -t yaffs /dev/mtdblock3 /mnt
+fi
+
+# Autostart-Script anlegen
+cp ./$ADDONENAME $RCDDIR
+chmod +x $RCDDIR/$ADDONENAME
+
+# Web-Konfiguration anlegen
+mkdir -p $WWWDIR
+cp -rp www/* $WWWDIR
+chmod -R 755 $WWWDIR
+
+# Menüeintrag erfassen
+touch /usr/local/etc/config/hm_addons.cfg
+updateAddonConfig.tcl -a $ADDONENAME -url "/addons/nuhome-files/index.cgi" -name Nuhome-Files -de "Nuhome-Files" -en "Nuhome-Files"
+
+
+# Addon-Verzeichnis anlegen
+mkdir -p $ADDONDIR
+cp -rp addon/* $ADDONDIR
+chmod -R 755 $ADDONDIR
+chown -R root $ADDONDIR
+chgrp -R root $ADDONDIR
+
+
+if [ "$1" == "CCU2" ]; then
+	echo "dismount"
+	umount /usr/local
+	umount /mnt
+else
+	echo "dismount"
+	umount /mnt
+	
+	echo Rebooting...
+	lcdtool "Reboot...             "
+	lcdtool -a 0x40 -t bin 00
+
+	echo "x" > /dev/watchdog
+	reboot
+	while true ; do true ;  done
+fi
