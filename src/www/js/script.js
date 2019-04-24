@@ -8,7 +8,7 @@ function removeFile(fileName) {
     console.log("updating")
     $.ajax({
         type: 'GET',
-        url: 'removeFile.cgi?fileName=' + fileName,
+        url: 'removeFile.cgi?fileName=' + fileName + '&' + window.location.search.substr(1),
         success: function (rawMsg) {
             if (rawMsg.status === "success") {
                 console.log("success")
@@ -17,11 +17,13 @@ function removeFile(fileName) {
             } else {
                 console.error("remove failed")
                 console.error(errorMsg.msg)
+				updateCurrentFiles()
             }
         },
-        fail: function (rawMsg) {
+        error: function (rawMsg) {
             console.log("failed")
             console.log(rawMsg)
+			updateCurrentFiles()
         }
     });
 }
@@ -56,7 +58,7 @@ function updateCurrentFiles() {
     console.log("updating")
     $.ajax({
         type: 'GET',
-        url: 'currentFiles.cgi',
+        url: 'currentFiles.cgi?'+ window.location.search.substr(1),
         success: function (rawMsg) {
             if (rawMsg.status === "success") {
                 console.log("success")
@@ -76,7 +78,7 @@ function updateCurrentFiles() {
                 console.error(errorMsg.msg)
             }
         },
-        fail: function (rawMsg) {
+        error: function (rawMsg) {
             console.log("failed")
             console.log(rawMsg)
         }
@@ -92,7 +94,7 @@ function uploadFile(formData, fileName) {
     
     $.ajax({
         type: 'POST',
-        url: 'upload.cgi?fileName=' + fileName,
+        url: 'upload.cgi?fileName=' + fileName + '&' + window.location.search.substr(1),
         data: formData,
         contentType: false,
         cache: false,
@@ -115,7 +117,7 @@ function uploadFile(formData, fileName) {
                 uploadError(progressbar, textField, rawMsg)
             }
         },
-        fail: function (rawMsg) {
+        error: function (rawMsg) {
             console.error("upload failed")
             console.error(rawMsg.msg)
             uploadError(progressbar, textField, rawMsg)
@@ -124,7 +126,9 @@ function uploadFile(formData, fileName) {
 }
 
 $(document).ready(function (e) {
-
+	
+	console
+	
     // Add Drop Effect "copy"
     $('#drop-zone').on('dragover', function (e) {
         e.stopPropagation();

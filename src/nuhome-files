@@ -18,7 +18,7 @@ case "$1" in
 info)
 	echo "Version: 1.0"
 	echo "Name: Nuhome Files"
-	echo "Info: <img src='/addons/nuhome-files/logo.png' />"
+	echo "Info: <img src='/addons/nuhome-files/img/logo.png' />"
 	echo "Operations: uninstall"
 	echo "Config-Url: $CONFIG_URL"
 	;;

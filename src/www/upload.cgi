@@ -141,11 +141,10 @@ proc process { } {
 # Create directory if it doesnt exist yet
 exec mkdir -p $filePath
 
-${log}::info "processing"
 # Call Process and return error 500 when a error is thrown
-if [catch {process} result] {
+if [catch {check_session} result] {
 
-    ${log}::info $result
+	${log}::info $result
 	set status 500
 	if { $errorCode != "NONE" } {
 	    set status $errorCode
@@ -157,15 +156,36 @@ if [catch {process} result] {
     # print json result in stdout
     # e.g {"status":"error","msg":"file already exists"}
 	puts -nonewline "\{\"status\":\"error\",\"msg\":\"${result}\"\}"
-
 # Return Code 200 if successful
 } else {
-	puts "Content-Type: ${content_type}"
-	puts "Status: 200 OK";
-	puts ""
-     # print json result in stdout
-    # e.g {"status":"success","msg":"success"}
-	puts -nonewline $result
+	${log}::info "processing"
+	# Call Process and return error 500 when a error is thrown
+	if [catch {process} result] {
+
+		${log}::info $result
+		set status 500
+		if { $errorCode != "NONE" } {
+			set status $errorCode
+		}
+		puts "Content-Type: ${content_type}"
+		puts "Status: $status";
+		puts ""
+		set result [json_string $result]
+		# print json result in stdout
+		# e.g {"status":"error","msg":"file already exists"}
+		puts -nonewline "\{\"status\":\"error\",\"msg\":\"${result}\"\}"
+
+	# Return Code 200 if successful
+	} else {
+		puts "Content-Type: ${content_type}"
+		puts "Status: 200 OK";
+		puts ""
+		 # print json result in stdout
+		# e.g {"status":"success","msg":"success"}
+		puts -nonewline $result
+	}
+
+	${log}::info "Stopping Execution"
 }
 
-${log}::info "Stopping Execution"
+
