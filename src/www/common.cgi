@@ -69,7 +69,7 @@ proc check_session { } {
 		if { [string equal $code "HTTP/1.0 200 OK"] } {
 			return 200;
 		} else {
-			return $code
+			return -code error "authentication failed"
 		}
 	} else {
 		return -code error "authentication failed"
