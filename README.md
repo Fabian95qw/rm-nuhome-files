@@ -19,6 +19,4 @@ It will generally look like this:
 http://[IP-of-CCU]/addons/nuhome-files/data/[Escaped_Filename.xxx]
 
 # Upload restriction
-There are currently no restrictions, and no SID check. Feel free to program it tough
-
-
+You need to be logged in to the Homeamtic in order to uplaod files, but not to access them. (SID-Check)
